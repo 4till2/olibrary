@@ -1,0 +1,231 @@
+== Openlibrary
+
+{<img src="https://badge.fury.io/rb/openlibrary.png" alt="Gem Version" />}[http://badge.fury.io/rb/openlibrary]
+
+The openlibrary gem provides Ruby clients for the {Open Library REST API}[http://openlibrary.org/dev/docs/restful_api] and {Books API}[http://openlibrary.org/dev/docs/api/books].
+
+For more information about Open Library development, visit the {Open Library Developer Center}[http://openlibrary.org/developers/api] and {Developer Notes}[http://openlibrary.org/dev]. If you want to receive the latest updates and learn how to contribute, join us on the {ol-tech mailing list}[http://mail.archive.org/cgi-bin/mailman/listinfo/ol-tech]!
+
+
+== Installation
+
+The gem is tested against Rubies 2.2.2, and current latest 2.2.x, 2.3.x, and 2.4.x (specifically 2.2.7, 2.3.4, 2.4.1) and runs smoothly with Rails 5.
+
+  gem install openlibrary
+
+or in your Gemfile:
+
+  gem 'openlibrary'
+
+== Usage
+
+You can use the Books client to retrieve a book's Open Library listing information, and the REST client to perform more advanced queries and save changes to Open Library.
+
+  # just require
+  require 'openlibrary'
+
+== REST Client
+
+You can use the REST client to look up books, authors, the revision history of any Open Library object, and recent changes to Open Library.
+
+You can also use the REST client to log in and save changes to Open Library, after you register your profile (or your bot's profile) with the {API Usergroup}[http://openlibrary.org/usergroup/api]. Send a message to the {ol-tech mailing list}[http://mail.archive.org/cgi-bin/mailman/listinfo/ol-tech] to learn how!
+
+=== Getting Started
+
+Before anything else, create a new client:
+
+  client = Openlibrary::Client.new
+
+=== Books
+
+Since Open Library has varying amounts of information about the books in its database, and returns data in a schemaless format, not every book will have the same properties. Common properties include `title`, `works`, and `contributors`, but most books will have more.
+
+Find a book by its OLID:
+
+  book = client.book('olid')
+
+  book.contributors     # array of book contributors
+  book.covers           # array of book cover ids
+  book.works            # array of works associated with the book
+  book.subjects         # array of subjects of the book
+
+  book.title            # book title
+  book.by_statement     # name of primary author(s) of the book
+  book.number_of_pages  # number of pages in the book
+  book.copyright_date   # book's copyright date
+  book.physical_format  # book's physical format
+  book.isbn_10[0]       # book's ISBN-10 identifier
+  book.isbn_13[0]       # book's ISBN-13 identifier
+  book.goodreads[0]     # book's goodreads id
+
+Get data on book contributors:
+
+  book.contributors.each do |c|
+    name = c.name   # contributor's name
+    role = c.role   # contributor's role (e.g., cover art)
+  end
+
+Get the book's subjects:
+
+  book.subjects.each do |s|
+    subject = s
+  end
+
+Get a book's Open Library object keys by its ISBN, LCCN, or OCLC identifier:
+
+  keys = client.book_by_isbn('isbn')   # isbn must be 10 or 13 characters long
+  keys = client.book_by_lccn('lccn')
+  keys = client.book_by_oclc('oclc')
+
+Iterate through the array of keys:
+
+  keys.each do |k|
+    key = k['key']  # keys are in the format '/books/{OLID}'
+  end
+
+Although keys are returned in an array, most arrays will only have one element.
+
+=== Authors
+
+Find an author by their OLID:
+
+  author = client.author('olid')
+
+  author.name                 # author name
+  author.birth_date           # author's birth date
+  author.death_date           # author's death date
+  author.last_modified.value  # date and time of last change to page
+  author.revision             # number of current revision
+  author.key!                 # author key, in the format '/authors/{OLID}
+
+=== Search
+
+Find books through the Open Library free text search:
+
+  results = client.search("A Tale of Two Cities")
+
+Search by book attributes:
+
+  results = client.search({author: "Doctorow", title: "Little Brother"})
+
+Results are arrays of books
+
+  results[0].title            # the title of the first result
+
+=== Revision History
+
+Get the revision history of any Open Library object:
+
+  history = client.rev_history('key')
+
+The key should be in the format '/type/OLID'. E.g., '/books/OL9220552M', '/authors/OL27349A', or '/works/OL468516W'.
+
+=== Recent Changes
+
+Get an array of recent changes to Open Library:
+
+  changes = client.recent
+
+=== Saving Changes
+
+Use the login method to get a session cookie:
+
+  cookie = client.login('username', 'password')
+
+Set the other parameters for the object you want to change:
+
+  key     = '/type/OLID'              # e.g., '/books/OL9220552M'
+  update  = full_object_with_changes  # must be JSON format
+  comment = 'changed X, Y, and Z'
+
+Save your changes and receive the updated object as a response:
+
+  object = client.save(key, cookie, update, comment)
+
+NOTICE: Before you can actually save changes to Open Library, you need to register your profile (or bot) with the {API Usergroup}[http://openlibrary.org/usergroup/api]. Send a message to the {ol-tech mailing list}[http://mail.archive.org/cgi-bin/mailman/listinfo/ol-tech] to learn how!
+
+== Books Client
+
+There are three classes in the openlibrary gem you can use to access the {Books API}[http://openlibrary.org/dev/docs/api/books]. Use Openlibrary::View to look up Open Library listing information, Openlibrary::Data to get a book's full metadata details, and Openlibrary::Details to get book details in addition to what the Openlibrary::View class provides.
+
+=== Openlibrary::View
+
+Instantiate the class:
+
+  view = Openlibrary::View
+
+Look up a book by its ISBN-10 or ISBN-13:
+
+  book = view.find_by_isbn("0451526538")
+
+  book.info_url      # book's URL on Open Library
+  book.preview       # book's preview state, either 'noview' or 'full'
+  book.thumbnail_url # url of thumbnail cover of the book, if available
+
+  book.preview_url
+  # Links to an archive.org page with a readable version of the book,
+  # if one is available. If not, links to the book's Open Library
+  # page. `book.preview` should be used first to test if a readable
+  # preview of the book exists.
+
+Other built-in finder methods:
+
+  view.find_by_lccn   # Library of Congress catalog number
+  view.find_by_oclc   # Worldcat Control Number
+  view.find_by_olid   # Open Library ID
+
+
+=== Openlibrary::Data
+
+Instantiate the class:
+
+  data = Openlibrary::Data
+
+Look up a book by its ISBN-10 or ISBN-13:
+
+  book_data = data.find_by_isbn("0451526538")
+
+  book_data.title    # book's title
+  book_data.authors  # array of authors
+
+Other built-in finder methods:
+
+  data.find_by_lccn   # Library of Congress catalog number
+  data.find_by_oclc   # Worldcat Control Number
+  data.find_by_olid   # Open Library ID
+
+=== Openlibrary::Details
+
+Instantiate the class:
+  
+  details = Openlibrary::Details
+
+Look up a book by its ISBN-10 or ISBN-13:
+
+  book_details = details.find_by_isbn("0451526538")
+
+  book_details.info_url    # book's URL on Open Library
+  book_details.details     # additional details, such as description
+
+Other built-in finder methods:
+
+  details.find_by_lccn   # Library of Congress catalog number
+  details.find_by_oclc   # Worldcat Control Number
+  details.find_by_olid   # Open Library ID
+
+== CONTRIBUTORS
+
+* Jay Fajardo https://github.com/jayfajardo
+* John Shutt https://github.com/pemulis
+* Robert Berry https://github.com/bdigital
+* Eric Larson https://github.com/ewlarson
+* Charles Horn https://github.com/hornc
+* Alex Grant https://github.com/grantovich
+* Bryan L. Fordham https://github.com/bfordham
+* Kyle Corbitt https://github.com/kcorbitt
+* Matt Dressel https://github.com/dresselm
+* Scott Lesser https://github.com/okcscott
+
+== LICENSE
+
+This code is released under the {CC0 License}[http://creativecommons.org/publicdomain/zero/1.0/], and may be used for any purpose without restrictions.
