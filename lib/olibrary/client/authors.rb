@@ -1,4 +1,4 @@
-module Openlibrary
+module Olibrary
   module Authors 
     # Find authors in Open Library by their key 
     #

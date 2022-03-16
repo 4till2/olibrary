@@ -1,4 +1,4 @@
-module Openlibrary
+module Olibrary
   module Books
     # Find books in Open Library by OLID, ISBN, LCCN, or OCLC
     #

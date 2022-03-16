@@ -1,4 +1,4 @@
-module Openlibrary
+module Olibrary
 
   class View 
     attr_accessor :bib_key

@@ -8,19 +8,19 @@ require_relative 'client/search'
 require_relative 'client/login'
 require_relative 'client/save'
 
-module Openlibrary
+module Olibrary
   class Client
-    include Openlibrary::Request
-    include Openlibrary::Books
-    include Openlibrary::Authors
-    include Openlibrary::History
-    include Openlibrary::Recent
-    include Openlibrary::Editions
-    include Openlibrary::Search
-    include Openlibrary::Login
-    include Openlibrary::Save
+    include Olibrary::Request
+    include Olibrary::Books
+    include Olibrary::Authors
+    include Olibrary::History
+    include Olibrary::Recent
+    include Olibrary::Editions
+    include Olibrary::Search
+    include Olibrary::Login
+    include Olibrary::Save
 
-    # Initialize an Openlibrary::Client instance
+    # Initialize an Olibrary::Client instance
     #
     def initialize(options={})
       unless options.kind_of?(Hash)

@@ -1,14 +1,14 @@
 require 'spec_helper'
 
-describe 'Openlibrary' do
+describe 'Olibrary' do
   it 'should return correct version string' do
-    expect(Openlibrary.version).to eq("Openlibrary version #{Openlibrary::VERSION}")
+    expect(Olibrary.version).to eq("Olibrary version #{Olibrary::VERSION}")
   end
 end
 
-describe 'Openlibrary::View' do
+describe 'Olibrary::View' do
 	before do
-		@book_view = Openlibrary::View.new
+		@book_view = Olibrary::View.new
 	end
 
 	subject { @book_view }
@@ -22,9 +22,9 @@ describe 'Openlibrary::View' do
 	it { is_expected.to respond_to(:thumbnail_url) }
 end
 
-describe 'Openlibrary::Data' do
+describe 'Olibrary::Data' do
 	before do
-		@book_data = Openlibrary::Data.new
+		@book_data = Olibrary::Data.new
 	end
 
 	subject { @book_data }
@@ -52,9 +52,9 @@ describe 'Openlibrary::Data' do
 	it { is_expected.to respond_to(:weight) }
 end
 
-describe 'Openlibrary::Details' do
+describe 'Olibrary::Details' do
 	before do
-		@book_details = Openlibrary::Details.new
+		@book_details = Olibrary::Details.new
 	end
 
 	subject { @book_details }

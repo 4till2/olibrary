@@ -1,4 +1,4 @@
-module Openlibrary
+module Olibrary
 
   class Details 
     attr_accessor :info_url

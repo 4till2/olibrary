@@ -1,4 +1,4 @@
-module Openlibrary
+module Olibrary
   module History
     # Get the revision history of an object in Open Library
     #

@@ -1,28 +1,26 @@
-== Openlibrary
+== Olibrary
 
-{<img src="https://badge.fury.io/rb/openlibrary.png" alt="Gem Version" />}[http://badge.fury.io/rb/openlibrary]
+> This project is a fork of https://github.com/jayfajardo/openlibrary with a focus on search.
 
-The openlibrary gem provides Ruby clients for the {Open Library REST API}[http://openlibrary.org/dev/docs/restful_api] and {Books API}[http://openlibrary.org/dev/docs/api/books].
+The olibrary gem provides Ruby clients for the {Open Library REST API}[http://openlibrary.org/dev/docs/restful_api] and {Books API}[http://openlibrary.org/dev/docs/api/books].
 
-For more information about Open Library development, visit the {Open Library Developer Center}[http://openlibrary.org/developers/api] and {Developer Notes}[http://openlibrary.org/dev]. If you want to receive the latest updates and learn how to contribute, join us on the {ol-tech mailing list}[http://mail.archive.org/cgi-bin/mailman/listinfo/ol-tech]!
+For more information about Open Library development, visit the {Open Library Developer Center}[http://openlibrary.org/developers/api] and {Developer Notes}[http://openlibrary.org/dev].
 
 
 == Installation
 
-The gem is tested against Rubies 2.2.2, and current latest 2.2.x, 2.3.x, and 2.4.x (specifically 2.2.7, 2.3.4, 2.4.1) and runs smoothly with Rails 5.
-
-  gem install openlibrary
+  gem install olibrary
 
 or in your Gemfile:
 
-  gem 'openlibrary'
+  gem 'olibrary'
 
 == Usage
 
 You can use the Books client to retrieve a book's Open Library listing information, and the REST client to perform more advanced queries and save changes to Open Library.
 
   # just require
-  require 'openlibrary'
+  require 'olibrary'
 
 == REST Client
 
@@ -34,7 +32,7 @@ You can also use the REST client to log in and save changes to Open Library, aft
 
 Before anything else, create a new client:
 
-  client = Openlibrary::Client.new
+  client = Olibrary::Client.new
 
 === Books
 
@@ -108,9 +106,18 @@ Search by book attributes:
 
   results = client.search({author: "Doctorow", title: "Little Brother"})
 
-Results are arrays of books
+You can add multiple requirements to a single parameter by including a comma within the string.
+
+  results = client.search({subject: "Science, Physics"}) # works as AND
+
+Results are arrays of book documents
 
   results[0].title            # the title of the first result
+
+Results include convienence functions for digging deeper
+
+  results[0].book.call() # a proc that will return a book document as returned by the `book` method for the current documents id.
+  results[0].authors.call() # a proc that will return an array of author documents as returned by the `author` method for each of the current documents author ids.
 
 === Revision History
 
@@ -146,13 +153,13 @@ NOTICE: Before you can actually save changes to Open Library, you need to regist
 
 == Books Client
 
-There are three classes in the openlibrary gem you can use to access the {Books API}[http://openlibrary.org/dev/docs/api/books]. Use Openlibrary::View to look up Open Library listing information, Openlibrary::Data to get a book's full metadata details, and Openlibrary::Details to get book details in addition to what the Openlibrary::View class provides.
+There are three classes in the openlibrary gem you can use to access the {Books API}[http://openlibrary.org/dev/docs/api/books]. Use Olibrary::View to look up Open Library listing information, Olibrary::Data to get a book's full metadata details, and Olibrary::Details to get book details in addition to what the Olibrary::View class provides.
 
-=== Openlibrary::View
+=== Olibrary::View
 
 Instantiate the class:
 
-  view = Openlibrary::View
+  view = Olibrary::View
 
 Look up a book by its ISBN-10 or ISBN-13:
 
@@ -175,11 +182,11 @@ Other built-in finder methods:
   view.find_by_olid   # Open Library ID
 
 
-=== Openlibrary::Data
+=== Olibrary::Data
 
 Instantiate the class:
 
-  data = Openlibrary::Data
+  data = Olibrary::Data
 
 Look up a book by its ISBN-10 or ISBN-13:
 
@@ -194,11 +201,11 @@ Other built-in finder methods:
   data.find_by_oclc   # Worldcat Control Number
   data.find_by_olid   # Open Library ID
 
-=== Openlibrary::Details
+=== Olibrary::Details
 
 Instantiate the class:
   
-  details = Openlibrary::Details
+  details = Olibrary::Details
 
 Look up a book by its ISBN-10 or ISBN-13:
 

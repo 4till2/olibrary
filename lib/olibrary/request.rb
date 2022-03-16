@@ -5,7 +5,7 @@ require 'json'
 require 'uri'
 require 'hashie'
 
-module Openlibrary
+module Olibrary
   module Request
     API_URL    = 'https://openlibrary.org'
 
@@ -14,13 +14,13 @@ module Openlibrary
     HANDLE_REST_CLIENT_RESPONSE = lambda do |response, request, result, &block|
       case response.code
       when 200
-        response.return!(request, result, &block)
+        response.return!(&block)
       when 401
-        raise Openlibrary::Unauthorized
+        raise Olibrary::Unauthorized
       when 404
-        raise Openlibrary::NotFound
+        raise Olibrary::NotFound
       when 302
-        raise Openlibrary::Redirect
+        raise Olibrary::Redirect
       end
     end
 
@@ -63,11 +63,11 @@ module Openlibrary
           session = response.cookies
           session
         when 401
-          raise Openlibrary::Unauthorized
+          raise Olibrary::Unauthorized
         when 404
-          raise Openlibrary::NotFound
+          raise Olibrary::NotFound
         when 302
-          raise Openlibrary::Redirect
+          raise Olibrary::Redirect
         end
       end
     end

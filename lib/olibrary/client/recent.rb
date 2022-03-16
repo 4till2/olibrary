@@ -1,4 +1,4 @@
-module Openlibrary
+module Olibrary
   module Recent
     # Get an array of recent changes to Open Library
     #

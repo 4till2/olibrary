@@ -1,6 +1,6 @@
 $:.unshift File.expand_path("../..", __FILE__)
 
-require 'openlibrary'
+require 'olibrary'
 require 'rspec'
 require 'rest-client'
 require 'webmock'
@@ -52,5 +52,5 @@ def fixture(file)
 end
 
 def api_url(path)
-  "#{Openlibrary::Request::API_URL}#{path}"
+  "#{Olibrary::Request::API_URL}#{path}"
 end

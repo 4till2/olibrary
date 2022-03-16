@@ -1,16 +1,16 @@
 require 'spec_helper'
 
 describe 'Client' do
-  let(:client)  { Openlibrary::Client.new }
+  let(:client)  { Olibrary::Client.new }
 
   describe '#new' do
     it 'requires an argument' do
-      expect { Openlibrary::Client.new(nil) }.
+      expect { Olibrary::Client.new(nil) }.
         to raise_error ArgumentError, "Options hash required."
     end
 
     it 'requires a hash argument' do
-      expect { Openlibrary::Client.new('foo') }.
+      expect { Olibrary::Client.new('foo') }.
         to raise_error ArgumentError, "Options hash required."
     end
   end

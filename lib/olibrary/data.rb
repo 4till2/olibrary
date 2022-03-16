@@ -1,4 +1,4 @@
-module Openlibrary
+module Olibrary
 
   class Data 
     attr_accessor :url

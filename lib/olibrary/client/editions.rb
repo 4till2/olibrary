@@ -1,4 +1,4 @@
-module Openlibrary
+module Olibrary
   module Editions
     # Get the editions of a work
     #

@@ -1,4 +1,4 @@
-module Openlibrary
+module Olibrary
   module Save
     # Save changes to Open Library
     # 

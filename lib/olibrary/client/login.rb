@@ -1,4 +1,4 @@
-module Openlibrary
+module Olibrary
   module Login
     # Log in to Open Library
     #
