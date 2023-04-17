@@ -1,6 +1,6 @@
 == Olibrary
 
-> This project is a fork of https://github.com/jayfajardo/openlibrary with a focus on search.
+> This project is a fork of https://github.com/jayfajardo/openlibrary with a focus on adding search abilities. Developed primarily as a means of familiarizing myself with ruby gems, and contributing to an existing codebase. See the commit history for my contributions.
 
 The olibrary gem provides Ruby clients for the {Open Library REST API}[http://openlibrary.org/dev/docs/restful_api] and {Books API}[http://openlibrary.org/dev/docs/api/books].
 
